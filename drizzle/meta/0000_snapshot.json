@@ -1,0 +1,261 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "1722bae5-151c-4d61-b882-c7bf1e6b05c8",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "courses": {
+      "name": "courses",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "cid": {
+          "name": "cid",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "no_of_chapters": {
+          "name": "no_of_chapters",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "include_video": {
+          "name": "include_video",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": false
+        },
+        "level": {
+          "name": "level",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "category": {
+          "name": "category",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "course_json": {
+          "name": "course_json",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bannerImageUrl": {
+          "name": "bannerImageUrl",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "courseContent": {
+          "name": "courseContent",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "('{}')"
+        },
+        "user_email": {
+          "name": "user_email",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "courses_user_email_users_email_fk": {
+          "name": "courses_user_email_users_email_fk",
+          "tableFrom": "courses",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_email"
+          ],
+          "columnsTo": [
+            "email"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "courses_id": {
+          "name": "courses_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "enrollCourse": {
+      "name": "enrollCourse",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "cid": {
+          "name": "cid",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "userEmail": {
+          "name": "userEmail",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "completeChapters": {
+          "name": "completeChapters",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "('{}')"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "enrollCourse_cid_courses_cid_fk": {
+          "name": "enrollCourse_cid_courses_cid_fk",
+          "tableFrom": "enrollCourse",
+          "tableTo": "courses",
+          "columnsFrom": [
+            "cid"
+          ],
+          "columnsTo": [
+            "cid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "enrollCourse_userEmail_users_id_fk": {
+          "name": "enrollCourse_userEmail_users_id_fk",
+          "tableFrom": "enrollCourse",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userEmail"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "enrollCourse_id": {
+          "name": "enrollCourse_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "full_name": {
+          "name": "full_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "subscription_id": {
+          "name": "subscription_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "users_id": {
+          "name": "users_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    }
+  },
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {},
+    "indexes": {}
+  }
+}

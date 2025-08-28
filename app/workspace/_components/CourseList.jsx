@@ -27,7 +27,7 @@ function CourseList() {
   };
 
   return (
-    <div className="mt-10">
+    <div className="mt-10 mx-5">
       <h2 className="text-3xl my-6 mx-4 font-semibold text-gray-800">Courses</h2>
       {courseList.length === 0 ? (
         <div className="flex p-10 items-center justify-center flex-col rounded-xl border-1 my-3 bg-sky-50">
@@ -45,7 +45,7 @@ function CourseList() {
           </AddNewCourseDialog>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
           {courseList.map((course, index) => (
             <CourseCard course={course} key={index} />
           ))}

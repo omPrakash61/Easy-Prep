@@ -9,7 +9,7 @@ export const usersTable = mysqlTable('users', {
 
 export const courseTable = mysqlTable('courses', {
   id: serial('id').primaryKey(),
-  cid: varchar('cid', { length: 100 }).notNull(),
+  cid: varchar('cid', { length: 100 }).notNull().unique(),
   name: varchar('name', { length: 100 }),
   description: varchar('description', { length: 1000 }),
   noOfChapters: int('no_of_chapters').notNull().default(1),
@@ -21,3 +21,10 @@ export const courseTable = mysqlTable('courses', {
   courseContent: json('courseContent').default({}),
   userEmail: varchar('user_email', { length: 100 }).notNull().references(() => usersTable.email),
 });
+
+export const enrolCourseTable = mysqlTable('enrollCourse', {
+  id: serial('id').primaryKey(),
+  cid: varchar('cid', { length: 100 }).references(() => courseTable.cid),
+  userEmail: varchar('userEmail', { length: 100 }).references(() => usersTable.email),
+  completeChapters: json('completeChapters').default({})
+})

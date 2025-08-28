@@ -1,32 +1,59 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Book, PlayCircle } from "lucide-react";
+import axios from "axios";
+import {
+  Book,
+  LoaderCircle,
+  PlayCircle,
+  SettingsIcon,
+} from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
+import React, { useState } from "react";
+import { toast } from "sonner";
 
 function CourseCard({ course }) {
-  const courseJson = course?.coursejson?.course;
-//   courseJson && console.log(courseJson);
+  // const courseJson = course?.coursejson?.course;
+  const [loading, setLoading] = useState(false);
+  //   courseJson && console.log(courseJson);
 
-function isValidUrl(url) {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
+ 
+  const onEnrollCourse = async () => {
+    try {
+      setLoading(true);
+      const result = await axios.post("/api/enroll-course", {
+        courseId: course?.cid,
+      });
+      console.log(result.data);
+      if(result.data?.response){
+        toast.warning("Already Enrolled!");
+      }
+      else toast.success("Enrolled");
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  function isValidUrl(url) {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
   }
-}
-
 
   return (
-    <div className="flex flex-col rounded-xl shadow-md bg-white overflow-hidden hover:shadow-lg transition-shadow duration-300 max-w-sm mx-auto md:max-w-none md:mx-0">
+    <div className="flex flex-col rounded-xl shadow-md bg-white overflow-hidden hover:shadow-lg transition-shadow duration-300 max-w-sm md:max-w-none md:mx-0">
       {course?.bannerImageUrl && isValidUrl(course.bannerImageUrl) && (
         <div className="relative w-full h-48 md:h-56">
           <Image
             src={course.bannerImageUrl}
             alt={course?.name || "Course image"}
             fill
-            className="object-cover rounded-t-xl"
-            sizes="(max-width: 768px) 100vw, 400px"
+            className="aspect-video rounded-t-xl"
+            sizes="(max-width: 628px) 100vw, 400px"
             priority
           />
         </div>
@@ -45,14 +72,24 @@ function isValidUrl(url) {
               {course?.noOfChapters || 0} Chapters
             </span>
           </div>
-          <a
-            href="#"
-            className="flex items-center gap-2 text-purple-600 font-semibold hover:text-purple-800 transition-colors"
-          >
-            <PlayCircle className="w-5 h-5" />
-            View Course
-            <ArrowRight className="w-4 h-4" />
-          </a>
+          {course?.courseContent?.length ? (
+            <Button size={"sm"} onClick={onEnrollCourse} disabled={loading} className={'my-3'}>
+              {" "}
+              {loading ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                <PlayCircle />
+              )}{" "}
+              Enroll Course{" "}
+            </Button>
+          ) : (
+            <Link href={`workspace/edit-course/${course?.cid}`}>
+              <Button variant="outline">
+                {" "}
+                <SettingsIcon /> Generate Course{" "}
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </div>

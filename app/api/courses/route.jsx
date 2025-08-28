@@ -1,7 +1,7 @@
 import { db } from "@/config/db";
 import { courseTable } from "@/config/schema";
 import { currentUser } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
@@ -11,7 +11,8 @@ export async function GET(request) {
 
   if (!courseId) {
     const result = await db.select().from(courseTable)
-      .where(eq(courseTable.userEmail, user.primaryEmailAddress?.emailAddress));
+      .where(eq(courseTable.userEmail, user.primaryEmailAddress?.emailAddress))
+      .orderBy(desc(courseTable.id));
 
       console.log(result);
 

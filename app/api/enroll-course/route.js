@@ -35,6 +35,31 @@ export async function POST(req) {
 
 export async function GET(req) {
   const user = await currentUser();
+
+  const { searchParams } = new URL(req.url);
+  const courseId = searchParams?.get("courseId");
+
+  console.log("courseId : " + courseId);
+
+  if (courseId) {
+    const result = await db
+      .select()
+      .from(courseTable)
+      .innerJoin(enrolCourseTable, eq(courseTable.cid, enrolCourseTable.cid))
+      .where(
+        and(
+          eq(
+            enrolCourseTable.userEmail,
+            user?.primaryEmailAddress.emailAddress
+          ),
+          eq(enrolCourseTable.cid, courseId)
+        )
+      )
+      .orderBy(desc(enrolCourseTable.id));
+
+    return NextResponse.json(result[0] ?? {});
+  }
+
   const result = await db
     .select()
     .from(courseTable)

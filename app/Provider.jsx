@@ -2,11 +2,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
-import { userDetailContext } from "./context/UserDetailContext";
+import { userDetailContext } from "../context/UserDetailContext";
+import { SelectedChapterIndexContext } from "../context/SelectedChapterIndexContext";
 
 function Provider({ children }) {
   const { user, isLoaded } = useUser();
   const [userDetail, setUserDetail] = useState(null);
+  const [selectedChapterIndex, setSelectedChapterIndex] = useState(0);
 
   useEffect(() => {
     const createUser = async () => {
@@ -28,7 +30,9 @@ function Provider({ children }) {
 
   return (
     <userDetailContext.Provider value={{ userDetail, setUserDetail }}>
-      <div>{children}</div>
+      <SelectedChapterIndexContext.Provider value={{selectedChapterIndex, setSelectedChapterIndex}}>
+        <div>{children}</div>
+      </SelectedChapterIndexContext.Provider>
     </userDetailContext.Provider>
   );
 }

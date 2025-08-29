@@ -52,12 +52,12 @@ function ChapterTopicList({ course }) {
                 ></div>
                 <div className="flex flex-col">
                   <h3 className="text-xl sm:text-xl font-bold mb-3 text-gray-900">
-                    {chapter.chapterName}
+                    {index+1 + ". " + chapter.chapterName}
                   </h3>
                   {chapter.topics.map((elem, idx) => {
                     return (
-                      <p key={idx} className="text-gray-600 mb-4">
-                        {elem}
+                      <p key={idx} className="text-gray-600 mx-2 mb-3">
+                        {idx+1+ ". " + elem}
                       </p>
                     );
                   })}

@@ -62,7 +62,7 @@ function EnrollCourseCard({ course, enrollCourse }) {
         </div>
 
         {/* CTA Button */}
-        <Link href={'/workspace/courses/'+course?.cid}>
+        <Link href={'/workspace/view-course/'+course?.cid}>
           <Button className="w-full mt-4 flex items-center justify-center gap-2">
             <PlayCircle className="w-4 h-4" />
             Continue Learning

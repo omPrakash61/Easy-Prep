@@ -5,6 +5,7 @@ import {
   Book,
   Clock,
   LucideLoader,
+  PlayCircle,
   Sparkle,
   TrendingUpIcon,
 } from "lucide-react";
@@ -13,8 +14,9 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
-function CourseInfo({ course }) {
+function CourseInfo({ course , viewCourse}) {
   const courseLayout = course?.courseJson;
   const router = useRouter();
 
@@ -88,7 +90,7 @@ function CourseInfo({ course }) {
             </div>
           ))}
         </div>
-        <Button
+         {!viewCourse ? <Button
           onClick={GenerateCourseContent}
           type="submit"
           className="w-full text-white gap-2"
@@ -100,7 +102,7 @@ function CourseInfo({ course }) {
             <Sparkle className="w-4 h-4" />
           )}
           {loading ? "Just few Seconds Content is getting Ready..." : "Generate Content"}
-        </Button>
+        </Button> : <Link href={'/course/'+course.cid}><Button className="w-full text-white gap-2"> <PlayCircle /> Continue Learning </Button></Link>}
       </div>
 
       <div className="w-full md:w-[400px] h-[240px] rounded-2xl overflow-hidden shadow-xl flex-shrink-0">

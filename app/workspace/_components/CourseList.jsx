@@ -28,7 +28,7 @@ function CourseList() {
 
   return (
     <div className="mt-10 mx-5">
-      <h2 className="text-3xl my-6 mx-4 font-semibold text-gray-800">Courses</h2>
+      <h2 className="text-3xl my-6 mx-4 font-sans font-bold text-gray-800">Courses</h2>
       {courseList.length === 0 ? (
         <div className="flex p-10 items-center justify-center flex-col rounded-xl border-1 my-3 bg-sky-50">
           <Image

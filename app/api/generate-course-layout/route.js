@@ -31,15 +31,13 @@ Using the user input below, generate a complete course strictly in **valid JSON 
         "chapterName": "string",
         "duration": "string", // e.g. "15 min"
         "topics": ["string"],
-        "imagePrompt": "string",
       }
     ]
   }
 }
 
 ### Notes:
-- Each course must include an bannerImageprompt that visually represents that course.
-- Each chapter must include an imagePrompt that visually represents that chapter.
+- Each course must include an bannerImageprompt that visually represents that course and make sure it reflects the name of course and related text/chapters.
 - The image prompt should describe a modern, 2D flat-style digital illustration:
   - Include UI/UX elements such as mockup screens, icons, sticky notes, creative workspace tools
   - Should feel creative, educational, and tech-savvy

@@ -38,7 +38,7 @@ function ChapterListSidebar({ courseInfo }) {
               {chapter?.topics?.map((topic, idx) => (
                 <h4
                   key={idx}
-                  className="py-2 px-3 border-2 border-transparent hover:border-purple-400 
+                  className="py-2 px-3 border-2 border-transparent hover:border-purple-400
                  text-black font-semibold hover:text-primary hover:bg-primary/5 
                  rounded-md cursor-pointer transition-colors"
                 >

@@ -97,7 +97,7 @@ function AppSidebar() {
                       href={item.path}
                       className={`text-[15px] px-3 py-4 mt-1 rounded-md transition-colors ${
                         path === item.path
-                          ? "bg-violet-200 text-primary font-bold"
+                          ? "bg-violet-200 text-primary"
                           : "hover:bg-violet-100 text-gray-700"
                       }`}
                     >

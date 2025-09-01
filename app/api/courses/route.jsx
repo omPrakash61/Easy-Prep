@@ -11,7 +11,7 @@ export async function GET(request) {
 
   if (!courseId) {
     const result = await db.select().from(courseTable)
-      .where(eq(courseTable.userEmail, user.primaryEmailAddress?.emailAddress))
+      // .where(eq(courseTable.userEmail, user.primaryEmailAddress?.emailAddress))
       .orderBy(desc(courseTable.id));
 
       console.log(result);

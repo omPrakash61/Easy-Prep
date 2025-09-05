@@ -29,7 +29,7 @@ function EnrollCourseList() {
         {enrolledCourseList?.map((course, index) => (
           <EnrollCourseCard
             course={course?.courses}
-            enrollCourse={course?.enrolledCourseList}
+            enrollCourse={course?.enrollCourse}
             key={index}
           />
         ))}

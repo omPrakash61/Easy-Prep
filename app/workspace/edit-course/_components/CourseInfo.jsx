@@ -40,7 +40,7 @@ function CourseInfo({ course , viewCourse}) {
 
       console.log(result.data);
       router.replace("/workspace");
-      toast.success("Course-content Generated Succesfully ✅");
+      toast.success("Course-content Generated Succesfully!");
     } catch (error) {
       router.replace("/workspace");
       console.error(error);

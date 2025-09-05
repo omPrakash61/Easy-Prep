@@ -71,3 +71,23 @@ export async function GET(req) {
 
   return NextResponse.json(result);
 }
+
+export async function PUT(req) {
+  const { completeChapters, courseId } = await req.json();
+  const user = await currentUser();
+
+  const result = await db
+    .update(enrolCourseTable)
+    .set({
+      completeChapters: completeChapters,
+    })
+    .where(
+      and(
+        eq(enrolCourseTable.cid, courseId),
+        eq(enrolCourseTable.userEmail, user?.primaryEmailAddress?.emailAddress)
+      )
+    ).execute();
+
+    console.log(result);
+    return NextResponse.json(result);
+}

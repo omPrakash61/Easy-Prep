@@ -7,7 +7,7 @@ function ChapterTopicList({ course }) {
   const chapters = course?.courseJson;
 
   useEffect(() => {
-    console.log(chapters);
+    console.log(course);
   }, [chapters]);
 
   return (
@@ -28,7 +28,7 @@ function ChapterTopicList({ course }) {
           {chapters?.map((chapter, index) => (
             <div
               key={index}
-              className={`relative flex items-center w-full ${
+              className={`relative flex items-center w-full  ${
                 index % 2 === 0 ? "md:justify-start" : "md:justify-end"
               }`}
             >
@@ -39,7 +39,7 @@ function ChapterTopicList({ course }) {
               </div>
 
               <div
-                className={`w-full md:w-[45%] p-6 bg-white rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.01] ${
+                className={`w-full md:w-[45%] p-6 bg-purple-50 rounded-xl border-1 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.007] ${
                   index % 2 === 0 ? "md:pr-12" : "md:pl-12"
                 }`}
               >
@@ -50,7 +50,7 @@ function ChapterTopicList({ course }) {
                       : "left-[45%] border-r-8 border-r-white"
                   }`}
                 ></div>
-                <div className="flex flex-col">
+                <div className="flex flex-col ">
                   <h3 className="text-xl sm:text-xl font-bold mb-3 text-gray-900">
                     {index+1 + ". " + chapter.chapterName}
                   </h3>

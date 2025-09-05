@@ -10,6 +10,7 @@ import CourseCard from "./CourseCard";
 function CourseList() {
   const [courseList, setCourseList] = useState([]);
   const user = useUser();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -19,8 +20,10 @@ function CourseList() {
 
   const getCourseList = async () => {
     try {
+      setLoading(true);
       const result = await axios.get("/api/courses");
       setCourseList(result.data);
+      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch courses:", error);
     }
@@ -28,8 +31,25 @@ function CourseList() {
 
   return (
     <div className="mt-10 mx-5">
-      <h2 className="text-3xl my-6 mx-4 font-sans font-bold text-gray-800">Courses</h2>
-      {courseList.length === 0 ? (
+      <h2 className="text-3xl my-6 mx-4 font-sans font-bold text-gray-800">
+        Courses
+      </h2>
+      {loading ? ( // Loading skeleton
+        <div className="flex p-10 items-center justify-center flex-col rounded-xl border-1 my-3 bg-sky-50">
+          <Image
+            src={"/learning.png"}
+            width={100}
+            height={100}
+            alt="learning-image"
+          />
+          <h2 className="text-xl my-2 font-semibold">
+            Loading Skaleton
+          </h2>
+          <AddNewCourseDialog>
+            <Button>Loading...</Button>
+          </AddNewCourseDialog>
+        </div>
+      ) : courseList?.length === 0 ? (
         <div className="flex p-10 items-center justify-center flex-col rounded-xl border-1 my-3 bg-sky-50">
           <Image
             src={"/learning.png"}

@@ -6,50 +6,73 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { SelectedChapterIndexContext } from "@/context/SelectedChapterIndexContext";
+import { Check } from "lucide-react";
 
 function ChapterListSidebar({ courseInfo }) {
-  const course = courseInfo?.courses;
-  const enrollCourse = courseInfo?.enrollCourse;
+  const completedChapters = courseInfo?.enrollCourse?.completeChapters;
   const courseJson = courseInfo?.courses?.courseJson;
-  const { selectedChapterIndex, setSelectedChapterIndex } = useContext(SelectedChapterIndexContext);
+  const { selectedChapterIndex, setSelectedChapterIndex } = useContext(
+    SelectedChapterIndexContext
+  );
   let res;
   if (courseJson) res = courseJson[0].chapterName;
-  console.log(res);
+  console.log(courseInfo);
 
   return (
-    <div className="w-full sm:w-80 bg-secondary sm:min-h-screen p-5 shadow-md">
-      <h2 className="text-2xl font-semibold mb-5 text-primary font-sans border-b-black border-b px-4 pb-5 ">
-        📚 Chapters
-      </h2>
+     <aside className="h-full flex flex-col">
+      {/* Fixed header inside the sidebar */}
+      <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary flex items-center gap-2">
+          📚 <span>Chapters</span>
+        </h2>
+      </div>
 
-      <Accordion type="single" collapsible className="space-y-3">
-        {courseJson?.map((chapter, index) => (
-          <AccordionItem
-            value={`item-${index}`}
-            key={index}
-            onClick={() => setSelectedChapterIndex(index)}
-            className="border rounded-lg overflow-hidden bg-white shadow-sm transition-colors data-[state=open]:border-purple-500 data-[state=open]:border-2"
-          >
-            <AccordionTrigger className="text-lg font-semibold hover:no-underline px-4 py-3 text-primary hover:bg-primary/12 transition-colors">
-              {index + 1}. {chapter?.chapterName} <span className="text-sm">({chapter?.duration})</span>
-            </AccordionTrigger>
+      {/* Scrollable area (independent) */}
+      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 sm:p-6 space-y-4 sidebar-scroll-left">
+        <Accordion type="single" collapsible className="space-y-4">
+          {courseJson && courseJson.map((chapter, index) => (
+            <AccordionItem
+              value={`item-${index}`}
+              key={index}
+              onClick={() => setSelectedChapterIndex(index)}
+              className={`rounded-xl overflow-hidden transition-all  ${
+                completedChapters[index] === 1
+                  ? "bg-green-50 border-l-4 border-l-green-500  data-[state=open]:border-l-green-400"
+                  : "bg-purple-50 border-l-4 border-l-purple-500  data-[state=open]:border-l-purple-400"
+              }`}
+            >
+              <AccordionTrigger className="text-base sm:text-lg font-semibold hover:no-underline px-4 py-3 text-gray-800 dark:text-gray-200 flex justify-between items-center">
+                <span>
+                  {index + 1}. {chapter?.chapterName}
+                </span>
+                <span className="text-xs sm:text-sm text-gray-500">
+                  {completedChapters[index] === 1 ? (
+                    <Check className="text-green-500" />
+                  ) : (
+                    chapter?.duration
+                  )}
+                </span>
+              </AccordionTrigger>
 
-            <AccordionContent className="px-4 pb-3">
-              {chapter?.topics?.map((topic, idx) => (
-                <h4
-                  key={idx}
-                  className="py-2 px-3 border-2 border-transparent hover:border-purple-400
-                 text-black font-semibold hover:text-primary hover:bg-primary/5 
-                 rounded-md cursor-pointer transition-colors"
-                >
-                  {topic}
-                </h4>
-              ))}
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
-    </div>
+              <AccordionContent className="px-4 pb-3 space-y-2">
+                {chapter?.topics?.map((topic, idx) => (
+                  <h4
+                    key={idx}
+                    className={`py-2 px-3 border border-transparent text-sm sm:text-base text-gray-700 font-medium rounded-md cursor-pointer transition-all ${
+                      completedChapters[index] === 1
+                        ? "hover:bg-green-100 hover:border-green-400"
+                        : "hover:bg-purple-100 hover:border-purple-400"
+                    }`}
+                  >
+                    {topic}
+                  </h4>
+                ))}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
+    </aside>
   );
 }
 

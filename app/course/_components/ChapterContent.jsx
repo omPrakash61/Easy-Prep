@@ -14,7 +14,7 @@ function ChapterContent({ courseInfo, userId }) {
   const { selectedChapterIndex } = useContext(SelectedChapterIndexContext);
   const [chapterContent, setChapterContent] = useState(null);
   const [loading, setLoading] = useState(false);
-  const completedChapters = courseInfo?.enrollCourse?.completeChapters;
+  const completedChapters = courseInfo?.enrollCourse?.completeChapters || [];
 
   const courseJson = courseInfo?.courses?.courseJson ?? [];
   const courseContent =

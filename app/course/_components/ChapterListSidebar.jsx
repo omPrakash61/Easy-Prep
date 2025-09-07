@@ -9,7 +9,7 @@ import { SelectedChapterIndexContext } from "@/context/SelectedChapterIndexConte
 import { Check } from "lucide-react";
 
 function ChapterListSidebar({ courseInfo }) {
-  const completedChapters = courseInfo?.enrollCourse?.completeChapters;
+  const completedChapters = courseInfo?.enrollCourse?.completeChapters || new Array(20);
   const courseJson = courseInfo?.courses?.courseJson;
   const { selectedChapterIndex, setSelectedChapterIndex } = useContext(
     SelectedChapterIndexContext

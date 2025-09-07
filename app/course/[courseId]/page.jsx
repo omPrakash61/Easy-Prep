@@ -24,12 +24,12 @@ function page() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden">
-      <AppHeader hideSidebar={true} />
+      <AppHeader hideSidebar={true} showMyLearningButton={true}/>
 
       <div className="flex-1 min-h-0 overflow-hidden flex">
         {/* Sidebar (drawer for <md, static for ≥md) */}
         <div
-          className={`fixed md:relative z-40 top-0 left-0 h-full w-72 bg-white dark:bg-secondary shadow-lg border-r border-gray-200 dark:border-gray-700 transform transition-transform duration-300
+          className={`fixed md:relative z-40 top-0 left-0 h-full w-72 bg-white  shadow-lg border-r border-gray-200 transform transition-transform duration-300
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} 
           md:translate-x-0 md:w-80`}
         >

@@ -21,6 +21,7 @@ import {
   Compass,
   CreditCard,
   LayoutDashboard,
+  Rocket,
   User,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -65,19 +66,15 @@ function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center mx-2 my-2 px-2 py-2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg animate-fade-in">
-          <Image
-            src="/EasyPrepAI.png"
-            alt="Logo"
-            width={110}
-            height={50}
-            className="rounded-lg shadow-lg shadow-violet-700 transition-transform duration-300 hover:scale-105"
-          />
-          <div className="ml-4">
-            <p className="text-white text-sm text-[12px] tracking-wide animate-slide-in">
-             <i> Simple Steps to Mastery</i>
-            </p>
-          </div>
+        <div className="flex items-center gap-3 rounded-sm my-1 px-2">
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center text-white shadow-md">
+              <Rocket className="w-5 h-5" />
+            </div>
+            <span className="hidden px-2 sm:inline-block font-sans font-bold text-xl">
+              Easy-Prep
+            </span>
+          </Link>
         </div>
       </SidebarHeader>
 
@@ -92,7 +89,7 @@ function AppSidebar() {
             <SidebarMenu>
               {SidebarOptions.map((item, index) => (
                 <SidebarMenuItem key={index}>
-                  <SidebarMenuButton asChild className={"p-5"}>
+                  <SidebarMenuButton asChild className={"p-7"}>
                     <Link
                       href={item.path}
                       className={`text-[15px] px-3 py-4 mt-1 rounded-md transition-colors ${

@@ -57,7 +57,7 @@ export async function POST(req) {
 
     const promises = course?.map(async (chapter) => {
       const config = { responseMimeType: "text/plain" };
-      const model = "gemini-1.5-flash";
+      const model = "gemma-3n-e2b-it";
       const contents = [
         {
           role: "user",
@@ -129,3 +129,4 @@ const GetYoutubeVideo = async (topic) => {
     return [];
   }
 };
+

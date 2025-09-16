@@ -44,11 +44,6 @@ const SidebarOptions = [
     path: "/workspace/explore",
   },
   {
-    title: "AI Tools",
-    icon: Bot,
-    path: "/workspace/ai-tools",
-  },
-  {
     title: "Billing",
     icon: CreditCard,
     path: "/workspace/billing",

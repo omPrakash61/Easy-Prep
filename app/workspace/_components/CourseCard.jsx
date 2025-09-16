@@ -52,7 +52,7 @@ function CourseCard({ course }) {
             src={course.bannerImageUrl}
             alt={course?.name || "Course image"}
             fill
-            className="aspect-video rounded-t-xl"
+            className="rounded-t-xl object-cover"
             sizes="(max-width: 628px) 100vw, 400px"
             priority
           />

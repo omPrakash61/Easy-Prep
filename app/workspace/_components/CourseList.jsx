@@ -21,7 +21,9 @@ function CourseList() {
   const getCourseList = async () => {
     try {
       setLoading(true);
-      const result = await axios.get("/api/courses");
+      const result = await axios.post("/api/courses", {
+        isAllCourse: false,
+      });
       setCourseList(result.data);
       setLoading(false);
     } catch (error) {

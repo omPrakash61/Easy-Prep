@@ -41,12 +41,7 @@ export async function POST(req) {
   let courseContent = null;
   try {
     const body = await req.json();
-    console.log(
-      "Incoming request body first element topics:",
-      body?.course[0]?.topics[0]
-    );
     const { course, courseId } = body;
-    console.log(course); // it's an Array
 
     if (!course) {
       return NextResponse.json(
@@ -73,13 +68,10 @@ export async function POST(req) {
 
       try {
         const rawResponse = response?.candidates[0].content.parts[0].text;
-        console.log("rawResponse : ", rawResponse);
         const cleanResponse = rawResponse
           .replace(/```json/g, "")
           .replace(/```/g, "")
           .trim();
-
-        console.log("Clean Response : ", cleanResponse);
         const youtubeData = await GetYoutubeVideo(chapter.chapterName);
         return {
           contentResponse: cleanResponse,

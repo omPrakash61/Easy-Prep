@@ -43,7 +43,7 @@ function AddNewCourseDialog({ children }) {
     try {
       console.log(formData);
       setIsLoading(true);
-      const result = await axios.post("api/generate-course-layout", {
+      const result = await axios.post("/api/generate-course-layout", {
         courseId: uuidv4(),
         ...formData,
       });

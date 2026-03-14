@@ -5,6 +5,8 @@ import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 
+export const runtime = "nodejs"; // important for Buffer & cloudinary
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -42,7 +44,7 @@ Using the user input below, generate a complete course strictly in **valid JSON 
   - Include UI/UX elements such as mockup screens, icons, sticky notes, creative workspace tools
   - Should feel creative, educational, and tech-savvy
   - Use a vibrant palette (blues, purples, oranges) and a clean, professional look
-  - Must visually reflect the chapter’s content/topic
+  - Must visually reflect the chapter's content/topic
 
 Output only valid JSON that matches the schema above. No markdown, no explanations, no comments.
 
@@ -61,7 +63,7 @@ export async function POST(req) {
 
   if (!formData) {
     console.error("formData is undefined or null");
-    return NextResponse.JSON({ message: "form Data is missing" });
+    return NextResponse.json({ message: "form Data is missing" }, { status: 400 });
   }
 
   const config = {
@@ -85,16 +87,15 @@ export async function POST(req) {
     contents,
   });
 
-  let jsonResponse;
+  let jsonResponse = null;
   try {
     const rawResponse = response?.candidates[0].content.parts[0].text;
-    console.log("rawResponse",rawResponse);
+    console.log("rawResponse", rawResponse);
     const rawJson = rawResponse.replace("```json", "").replace("```", "");
-    console.log("rawJson",rawJson);
+    console.log("rawJson", rawJson);
     jsonResponse = JSON.parse(rawJson);
-    console.log("jsonResponse",jsonResponse);
-    console.log("jsonResponse.course",jsonResponse.course);
-
+    console.log("jsonResponse", jsonResponse);
+    console.log("jsonResponse.course", jsonResponse.course);
   } catch (error) {
     console.error("Failed to parse JSON:", error);
     return NextResponse.json(
@@ -103,8 +104,7 @@ export async function POST(req) {
     );
   }
 
-  // before inserting the data into db i will generate the banner image from Model and send the generated image to cloudinary in return i will get URL which i will save into my db
-
+  // Helper: upload to Cloudinary
   const uploadImageToCloudinary = async (buffer, mimeType) => {
     const base64 = buffer.toString("base64");
     const dataUri = `data:${mimeType};base64,${base64}`;
@@ -124,53 +124,40 @@ export async function POST(req) {
 
   let imageUploadedUrl = "";
 
+  // Generate image using Pollinations.ai - 100% FREE, no signup, no API key needed!
   try {
-    const configImage = {
-      responseModalities: ["IMAGE", "TEXT"],
-    };
-    const modelImage = "gemini-2.0-flash-preview-image-generation";
-    const contentsImage = [
-      {
-        role: "user",
-        parts: [
-          {
-            text:
-              "Completly avoid generating text response and generate image having " +
-              jsonResponse.course.bannerImageprompt,
-          },
-        ],
-      },
-    ];
-    const response = await ai.models.generateContentStream({
-      model: modelImage,
-      config: configImage,
-      contents: contentsImage,
-    });
+    const prompt = `modern 2D flat style digital illustration, ${jsonResponse.course.bannerImageprompt}, vibrant colors, educational theme, professional design, clean aesthetic`;
 
-    for await (const chunk of response) {
-      const parts = chunk?.candidates?.[0]?.content?.parts;
-      const inlineData = parts?.[0]?.inlineData;
+    console.log("🎨 Generating image with prompt:", prompt);
 
-      if (inlineData?.data) {
-        const buffer = Buffer.from(inlineData.data, "base64");
-        const mimeType = inlineData.mimeType || "image/png";
+    // Pollinations.ai - completely free, no authentication needed
+    const encodedPrompt = encodeURIComponent(prompt);
+    const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=576&seed=${Date.now()}&model=flux&nologo=true`;
 
-        imageUploadedUrl = await uploadImageToCloudinary(buffer, mimeType);
+    console.log("📡 Fetching from Pollinations.ai...");
 
-        if (!imageUploadedUrl) {
-          throw new Error("No image data received from Gemini.");
-        }
+    const imageResponse = await fetch(pollinationsUrl);
 
-        console.log("✅ Uploaded Image URL:", imageUploadedUrl);
-        break; 
-      }
+    if (!imageResponse.ok) {
+      throw new Error(`Pollinations.ai error: ${imageResponse.status}`);
     }
+
+    // Get image as buffer
+    const imageArrayBuffer = await imageResponse.arrayBuffer();
+    const buffer = Buffer.from(imageArrayBuffer);
+    const mimeType = 'image/jpeg';
+
+    console.log("✅ Image generated, uploading to Cloudinary...");
+
+    // Upload to Cloudinary
+    imageUploadedUrl = await uploadImageToCloudinary(buffer, mimeType);
+    console.log("✅ Image uploaded successfully:", imageUploadedUrl);
   } catch (error) {
-    console.log(error);
+    console.error("❌ Image Generation/Upload Error:", error);
+    // Continue without image - don't fail the entire request
   }
 
   // save to db
-
   const dbResult = await db.insert(courseTable).values({
     cid: courseId,
     name: jsonResponse.course.name,
@@ -180,11 +167,11 @@ export async function POST(req) {
     level: jsonResponse.course.level,
     category: jsonResponse.course.category,
     courseJson: jsonResponse.course.courseJson,
-    userEmail: user.emailAddresses[0].emailAddress,
+    userEmail: user?.emailAddresses?.[0]?.emailAddress ?? "",
     bannerImageUrl: imageUploadedUrl,
   });
 
   console.log(dbResult);
 
-  return NextResponse.json({ status: dbResult, courseId: courseId });
+  return NextResponse.json({ status: dbResult, courseId });
 }

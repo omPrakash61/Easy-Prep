@@ -16,7 +16,7 @@ const pool = mysql.createPool({
   ssl: {
     // This object explicitly commands the driver to use a secure TLSv1.2 connection.
     minVersion: 'TLSv1.2',
-    rejectUnauthorized: true,
+    rejectUnauthorized: false,
   },
 });
 

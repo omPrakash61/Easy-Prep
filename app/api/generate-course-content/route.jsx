@@ -103,7 +103,7 @@ export async function POST(req) {
 
     const promises = course?.map(async (chapter) => {
       const config = { responseMimeType: "text/plain" };
-      const model = "gemma-3n-e2b-it";
+      const model = "gemini-2.5-flash";
       const contents = [
         {
           role: "user",
